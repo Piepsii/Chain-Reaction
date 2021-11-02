@@ -42,7 +42,7 @@ public class BezierSpline : MonoBehaviour
             new Vector3(3f, 0f, 0f),
             new Vector3(4f, 0f, 0f)
         };
-        modes = new BezierControlPointMode[]{
+        modes = new BezierControlPointMode[2]{
             BezierControlPointMode.Free,
             BezierControlPointMode.Free
         };
@@ -86,13 +86,13 @@ public class BezierSpline : MonoBehaviour
     public void AddCurve(){
         Vector3 point = points[points.Length - 1];
         Array.Resize(ref points, points.Length + 3);
-        point.x += 1f;
+        point.x += 10f;
         points[points.Length - 3] = point;
-        point.x += 1f;
+        point.x += 10f;
         points[points.Length - 2] = point;
-        point.x += 1f;
+        point.x += 10f;
         points[points.Length - 1] = point;
-        point.x += 1f;
+        point.x += 10f;
 
         Array.Resize(ref modes, modes.Length + 1);
         modes[modes.Length - 1] = modes[modes.Length - 2];
@@ -142,7 +142,8 @@ public class BezierSpline : MonoBehaviour
     }
 
     public BezierControlPointMode GetControlPointMode (int index){
-        return modes[(index + 1) / 3];
+        int i = (index + 1) / 3;
+        return modes[i];
     }
 
     public void SetControlPointMode(int index, BezierControlPointMode mode){
