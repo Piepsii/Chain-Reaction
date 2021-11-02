@@ -63,6 +63,45 @@ public class BezierSpline : MonoBehaviour
         return transform.TransformPoint(Bezier.GetPoint(points[i], points[i + 1], points[i + 2], points[i + 3], t));
     }
 
+    public Vector3 GetEquallyDistancedPoint(int index, int numSegments, int precision = 5)
+    {
+        Vector3[] chordPoints = new Vector3[numSegments];
+        float t = (float)index / numSegments;
+        for(int i = 0; i < chordPoints.Length; i++) 
+        {
+            float r = (1f / numSegments) * i;
+            chordPoints[i] = GetPoint(r);
+        }
+
+        for(int n = 0; n < precision; n++)
+        {
+            float[] distances = new float[numSegments - 1];
+            for(int i = 0; i < distances.Length; i++)
+            {
+                distances[i] = Vector3.Distance(chordPoints[i], chordPoints[i + 1]);
+            }
+            float[] ratios = new float[numSegments - 2];
+            for(int i = 0; i < ratios.Length; i++)
+            {
+                ratios[i] = 0.5f * 
+                    (distances[i + 1] - distances[i]) /
+                    (distances[i] + distances[i + 1]);
+            }
+            for(int i = 1; i < chordPoints.Length - 2; i++)
+            {
+                if(ratios[i - 1] > 0f)
+                {
+                    chordPoints[i] += ratios[i - 1] * (chordPoints[i + 1] - chordPoints[i]);
+                }
+                else
+                {
+                    chordPoints[i] += ratios[i - 1] * (chordPoints[i] - chordPoints[i - 1]);
+                }
+            }
+        }
+        return chordPoints[index];
+    }
+
 
     public Vector3 GetVelocity(float t){
         int i;
@@ -86,13 +125,17 @@ public class BezierSpline : MonoBehaviour
     public void AddCurve(){
         Vector3 point = points[points.Length - 1];
         Array.Resize(ref points, points.Length + 3);
-        point.x += 10f;
+        point.x += 2f;
+        point.y += 1f;
         points[points.Length - 3] = point;
-        point.x += 10f;
+        point.x += 2f;
+        point.y += 1f;
         points[points.Length - 2] = point;
-        point.x += 10f;
+        point.x += 2f;
+        point.y += 1f;
         points[points.Length - 1] = point;
-        point.x += 10f;
+        point.x += 2f;
+        point.y += 1f;
 
         Array.Resize(ref modes, modes.Length + 1);
         modes[modes.Length - 1] = modes[modes.Length - 2];

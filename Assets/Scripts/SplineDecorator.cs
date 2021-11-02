@@ -5,7 +5,9 @@ public class SplineDecorator : MonoBehaviour
 {
     public BezierSpline spline;
     public int frequency;
+    public int precision;
     public bool lookForward;
+    public bool equallyDistanced;
     public Transform[] items;
     public UnityEngine.Object[] decorations;
 
@@ -25,16 +27,23 @@ public class SplineDecorator : MonoBehaviour
         {
             stepSize = 1f / (stepSize - 1);
         }
-        GameObject parent = new GameObject("Dominoes");
+        GameObject parent = new GameObject("Decorations");
         parent.transform.parent = transform;
         for (int p = 0, f = 0; f < frequency; f++)
         {
             for(int i = 0; i < items.Length; i++, p++)
             {
-
                 Transform item = Instantiate(items[i], parent.transform) as Transform;
                 item.parent = parent.transform;
-                Vector3 position = spline.GetPoint(p * stepSize);
+                Vector3 position;
+                if (equallyDistanced)
+                {
+                    position = spline.GetEquallyDistancedPoint((f * items.Length) + i, frequency * items.Length, precision);
+                }
+                else
+                {
+                    position = spline.GetPoint(p * stepSize);
+                }
                 item.position = position;
                 if (lookForward)
                 {
