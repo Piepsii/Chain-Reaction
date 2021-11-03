@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class BezierSpline : MonoBehaviour
 {
+    public Vector3 nextCurveOffset;
+
     [SerializeField]
     private Vector3[] points;
     [SerializeField]
@@ -125,17 +127,21 @@ public class BezierSpline : MonoBehaviour
     public void AddCurve(){
         Vector3 point = points[points.Length - 1];
         Array.Resize(ref points, points.Length + 3);
-        point.x += 2f;
-        point.y += 1f;
+        point.x += nextCurveOffset.x;
+        point.y += nextCurveOffset.y;
+        point.z += nextCurveOffset.z;
         points[points.Length - 3] = point;
-        point.x += 2f;
-        point.y += 1f;
+        point.x += nextCurveOffset.x;
+        point.y += nextCurveOffset.y;
+        point.z += nextCurveOffset.z;
         points[points.Length - 2] = point;
-        point.x += 2f;
-        point.y += 1f;
+        point.x += nextCurveOffset.x;
+        point.y += nextCurveOffset.y;
+        point.z += nextCurveOffset.z;
         points[points.Length - 1] = point;
-        point.x += 2f;
-        point.y += 1f;
+        point.x += nextCurveOffset.x;
+        point.y += nextCurveOffset.y;
+        point.z += nextCurveOffset.z;
 
         Array.Resize(ref modes, modes.Length + 1);
         modes[modes.Length - 1] = modes[modes.Length - 2];

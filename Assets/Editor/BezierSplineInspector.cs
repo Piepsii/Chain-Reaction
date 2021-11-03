@@ -42,6 +42,15 @@ public class BezierSplineInspector : Editor
             spline.AddCurve();
             EditorUtility.SetDirty(spline);
         }
+
+        EditorGUI.BeginChangeCheck();
+        Vector3 nextCurveOffset = EditorGUILayout.Vector3Field("Next Curve Offset", spline.nextCurveOffset);
+        if (EditorGUI.EndChangeCheck())
+        {
+            Undo.RecordObject(spline, "Change Next Curve Offset");
+            EditorUtility.SetDirty(spline);
+            spline.nextCurveOffset = nextCurveOffset;
+        }
     }
 
     private void OnSceneGUI(){
