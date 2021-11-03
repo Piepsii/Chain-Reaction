@@ -154,6 +154,31 @@ public class BezierSpline : MonoBehaviour
         }
     }
 
+    public void RemoveCurve(int pointIndex)
+    {
+        int curveIndex = (pointIndex - 1) / 3;
+        if (curveIndex < 0 || curveIndex > CurveCount)
+            return;
+
+        if(curveIndex == CurveCount)
+        {
+            Array.Clear(points, points.Length - 3, 3);
+            Array.Resize(ref points, points.Length - 3);
+
+            Array.Clear(modes, modes.Length - 1, 1);
+            Array.Resize(ref modes, modes.Length - 1);
+        }
+        else
+        {
+            Array.Clear(points, curveIndex * 3, 3);
+            for (int i = curveIndex * 3 + 3; i < points.Length; i++)
+                points[i - 3] = points[i];
+
+            Array.Resize(ref points, points.Length - 3);
+        }
+
+    }
+
     public Vector3 GetControlPoint(int index){
         return points[index];
     }

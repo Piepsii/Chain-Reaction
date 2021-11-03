@@ -5,12 +5,7 @@ using UnityEngine;
 public class DrawDots : MonoBehaviour
 {
     public int trailAmount = 1000;
-    SphereCollider sphere;
     Queue<Vector3> positions = new Queue<Vector3>();
-
-    void Start(){
-        sphere = GetComponent<SphereCollider>();
-    }
 
     void OnDrawGizmos(){
         Gizmos.color = Color.green;

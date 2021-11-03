@@ -37,11 +37,21 @@ public class BezierSplineInspector : Editor
         if(selectedIndex >= 0 && selectedIndex < spline.ControlPointCount){
             DrawSelectedPointInspector();
         }
+
+        GUILayout.BeginHorizontal("Curve Editor");
         if(GUILayout.Button("Add Curve")){
             Undo.RecordObject(spline, "Add Curve");
             spline.AddCurve();
             EditorUtility.SetDirty(spline);
         }
+
+        if(GUILayout.Button("Remove Curve"))
+        {
+            Undo.RecordObject(spline, "Remove Curve");
+            spline.RemoveCurve(selectedIndex);
+            EditorUtility.SetDirty(spline);
+        }
+        GUILayout.EndHorizontal();
 
         EditorGUI.BeginChangeCheck();
         Vector3 nextCurveOffset = EditorGUILayout.Vector3Field("Next Curve Offset", spline.nextCurveOffset);

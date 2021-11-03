@@ -17,42 +17,37 @@ public class SplineDecorator : MonoBehaviour
         {
             return;
         }
-        float stepSize = frequency * items.Length;
+
+        float stepSize = frequency;
         decorations = new UnityEngine.Object[(int)stepSize];
         if(spline.Loop || stepSize == 1)
-        {
             stepSize = 1f / stepSize;
-        }
         else
-        {
             stepSize = 1f / (stepSize - 1);
-        }
+
         GameObject parent = new GameObject("Decorations");
         parent.transform.parent = transform;
-        for (int p = 0, f = 0; f < frequency; f++)
+        for (int i = 0; i < frequency; i++)
         {
-            for(int i = 0; i < items.Length; i++, p++)
+            Transform item = Instantiate(items[i % items.Length], parent.transform) as Transform;
+            item.parent = parent.transform;
+            Vector3 position;
+            if (equallyDistanced)
             {
-                Transform item = Instantiate(items[i], parent.transform) as Transform;
-                item.parent = parent.transform;
-                Vector3 position;
-                if (equallyDistanced)
-                {
-                    position = spline.GetEquallyDistancedPoint((f * items.Length) + i, frequency * items.Length, precision);
-                }
-                else
-                {
-                    position = spline.GetPoint(p * stepSize);
-                }
-                item.position = position;
-                if (lookForward)
-                {
-                    item.transform.LookAt(position + spline.GetDirection(p * stepSize));
-                }
-                parent.transform.rotation = Quaternion.identity;
-                UnityEngine.Object o = item.gameObject;
-                decorations[(f * items.Length) + i] = o;
+                position = spline.GetEquallyDistancedPoint(i, frequency, precision);
             }
+            else
+            {
+                position = spline.GetPoint(i * stepSize);
+            }
+            item.position = position;
+            if (lookForward)
+            {
+                item.transform.LookAt(position + spline.GetDirection(i * stepSize));
+            }
+            parent.transform.rotation = Quaternion.identity;
+            UnityEngine.Object o = item.gameObject;
+            decorations[i] = o;
         }
     }
 
